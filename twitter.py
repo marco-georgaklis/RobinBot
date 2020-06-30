@@ -8,6 +8,7 @@ auth.set_access_token(config.accessToken, config.secretAccessToken)
 
 api = tweepy.API(auth)
 
+
 # find the average polarity of the most recent tweets that use the parameter word to determine if
 # twitter looks at the word in a generally positive or negative light
 def findAvgSentiment(word):

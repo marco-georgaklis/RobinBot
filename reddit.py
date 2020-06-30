@@ -12,15 +12,17 @@ stock_subreddits = ["stocks", "StockMarket", "options", "investing", "wallstreet
 
 
 # finding the average sentiment
-def findAvgSentiment(word, sub):
+def findAvgSentiment(word, sub, time_frame):
     total_polarity = 0
     count = 0
 
-    for submission in reddit.subreddit(sub).search(word, "relevance", "lucene", "day"):
+    for submission in reddit.subreddit(sub).search(word, "relevance", "lucene", time_frame):
         text = submission.selftext
         polarity = tb(text).sentiment.polarity
         total_polarity += polarity
-        count += 1
+
+        if polarity != 0:
+            count += 1
 
     if count == 0:
         return 0
@@ -28,6 +30,15 @@ def findAvgSentiment(word, sub):
     return total_polarity / count
 
 
-for subreddit in stock_subreddits:
-    print(subreddit)
-    print(findAvgSentiment("Elon Musk", subreddit))
+def scanStockSubs(symbol, time_frame):
+    # total polarity value
+    total_sentiment = 0
+
+    for sub in stock_subreddits:
+        sent = findAvgSentiment(symbol, sub, time_frame)
+        total_sentiment += sent
+
+    return total_sentiment / len(stock_subreddits)
+
+
+
